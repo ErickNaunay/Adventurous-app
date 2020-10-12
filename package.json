@@ -1,0 +1,42 @@
+{
+  "name": "final_project",
+  "version": "1.0.0",
+  "description": "Story-teller with mean stack",
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --config .prettierrc 'server/**/*.ts' --write && echo 'Prettier format complete'",
+    "watch": "onchange 'server/**/*.ts' --prettier --write {{changed}}",
+    "start:dev": "nodemon",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/app.js"
+  },
+  "author": "Erick Naunay, Aldrik Santos",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/node": "^14.11.8",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "nodemon": "^2.0.4",
+    "onchange": "^7.0.2",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format && npm run lint"
+    }
+  }
+}
