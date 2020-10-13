@@ -1,9 +1,8 @@
-import { Model } from 'mongoose';
 import {
   CreateStoryDto,
   UpdateStoryDto,
   StoryDto
-} from '../../../business/use-cases/story/dto';
+} from '../../../business/use-cases/story/dtos';
 
 import { StoryDocument, StoryModelType } from '../models/story';
 export interface IStoryMapper {

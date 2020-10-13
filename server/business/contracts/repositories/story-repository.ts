@@ -2,7 +2,7 @@ import {
   StoryDto,
   CreateStoryDto,
   UpdateStoryDto
-} from '../../use-cases/story/dto';
+} from '../../use-cases/story/dtos';
 import { Response } from '../../use-cases/common/dto';
 
 export default interface IStoryRepository {

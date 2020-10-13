@@ -1,10 +1,12 @@
 import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import cors, { CorsOptions } from 'cors';
 import bodyParser from 'body-parser';
 import { HttpError } from 'http-errors';
 import logger from './utils/logger';
 import expressLogger from './application/logger';
+import routes from './application/routes';
 import ConnectionManager from './infrastructure/odm/connection-manager';
 import containerDI from './dependecy-injection-container';
 
@@ -46,7 +48,7 @@ const errorHandler = (
     logger.error(err.stack || '');
   }
 
-  res.status(err.status ?? 500);
+  res.status(err.status ?? StatusCodes.INTERNAL_SERVER_ERROR);
   res.json(err);
 };
 
@@ -54,6 +56,8 @@ app.use(cors(corsOptionsDelegate));
 app.get('/v1/status', (req: Request, res: Response) => {
   res.json({ time: new Date() });
 });
+
+app.use('/', routes(app));
 
 app.use(errorHandler);
 
