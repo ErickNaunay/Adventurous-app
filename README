@@ -1,0 +1,10 @@
+# To start with the project:
+
+-> npm install
+-> rename .env.example to .env with your credentials
+-> npm run start:dev (launches the api on dev)
+
+# Other usefull commands
+
+-> npm run lint
+-> npm run format
