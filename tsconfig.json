@@ -18,10 +18,5 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node"
-  },
-  "files": [
-    " --esModuleInterop",
-    " --module",
-    "commonjs"
-  ]
+  }
 }
