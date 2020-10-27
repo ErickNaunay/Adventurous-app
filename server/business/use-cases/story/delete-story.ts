@@ -1,7 +1,7 @@
 import IStoryRepository from '../../contracts/repositories/story-repository';
 
 export interface IDeleteStory {
-  execute(id: number): Promise<void>;
+  execute(id: string): Promise<void>;
 }
 
 export class DeleteStory implements IDeleteStory {
@@ -11,7 +11,7 @@ export class DeleteStory implements IDeleteStory {
     this.repository = repository;
   }
 
-  execute(id: number): Promise<void> {
+  execute(id: string): Promise<void> {
     return this.repository.delete(id);
   }
 }

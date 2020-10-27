@@ -1,10 +1,17 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 import IStory from '../../../business/entities/story';
-export interface StoryDocument extends Omit<IStory, 'id'>, Document {}
+import { ChapterDocument } from './chapter';
+
+export interface StoryDocument
+  extends Omit<IStory, 'id' | 'chapters'>,
+    Document {
+  chapters: ChapterDocument[];
+}
 
 export const StorySchema: Schema = new Schema({
   title: { type: String, unique: true, required: true },
   summary: { type: String, required: true },
+  chapters: [{ type: Schema.Types.ObjectId, ref: 'Chapter' }],
   createdAt: { type: Date, default: Date.now }
 });
 

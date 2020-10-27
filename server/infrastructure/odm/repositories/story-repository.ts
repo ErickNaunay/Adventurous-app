@@ -1,4 +1,6 @@
+import { isValidObjectId } from 'mongoose';
 import createHttpError from 'http-errors';
+import httpStatusCodes from 'http-status-codes';
 import {
   StoryDto,
   CreateStoryDto,
@@ -7,7 +9,7 @@ import {
   IStoryRepository
 } from '../../../business/contracts/repositories/story-repository';
 import { IStoryMapper } from '../mappers';
-import { StoryModelType } from '../models/story';
+import { StoryDocument, StoryModelType } from '../models/story';
 
 export default class StoryRepository implements IStoryRepository {
   private readonly model: StoryModelType;
@@ -22,7 +24,9 @@ export default class StoryRepository implements IStoryRepository {
     const stories = await this.model.find().exec();
 
     const result = stories?.length
-      ? stories.map((story) => this.mapper.toDto(story))
+      ? await Promise.all(
+          stories.map(async (story) => await this.mapper.toDto(story))
+        )
       : [];
 
     return {
@@ -30,40 +34,65 @@ export default class StoryRepository implements IStoryRepository {
     };
   }
 
-  async findOne(id: number): Promise<Response<StoryDto>> {
+  async findOne(id: string): Promise<Response<StoryDto>> {
+    const errorMsg = `Could not find story with id = '${id}'`;
+
+    if (!isValidObjectId(id)) {
+      throw new createHttpError.NotFound(errorMsg);
+    }
+
     const story = await this.model.findById(id).exec();
 
     if (!story) {
-      throw new createHttpError.NotFound(
-        `Could not find story with id = '${id}'`
-      );
+      throw new createHttpError.NotFound(errorMsg);
     }
 
     return {
-      data: this.mapper.toDto(story)
+      data: await this.mapper.toDto(story)
     };
   }
 
   async create(params: CreateStoryDto): Promise<Response<StoryDto>> {
     const newStory = this.mapper.toDocument(params);
 
-    const story = await newStory.save();
+    let story: StoryDocument;
+
+    try {
+      story = await newStory.save();
+    } catch (err) {
+      throw createHttpError(
+        httpStatusCodes.BAD_REQUEST,
+        'Story could not be created',
+        {
+          errors: [
+            {
+              property: 'title',
+              constraints: ['has already been taken']
+            }
+          ]
+        }
+      );
+    }
 
     return {
-      data: this.mapper.toDto(story)
+      data: await this.mapper.toDto(story)
     };
   }
 
   async update(
-    id: number,
+    id: string,
     params: UpdateStoryDto
   ): Promise<Response<StoryDto>> {
+    const errorMsg = `Could not find story with id = '${id}'`;
+
+    if (!isValidObjectId(id)) {
+      throw new createHttpError.NotFound(errorMsg);
+    }
+
     const story = await this.model.findById(id).exec();
 
     if (!story) {
-      throw new createHttpError.NotFound(
-        `Could not find story with id = '${id}'`
-      );
+      throw new createHttpError.NotFound(errorMsg);
     }
 
     const updateParams = this.mapper.toDocument(params);
@@ -71,20 +100,40 @@ export default class StoryRepository implements IStoryRepository {
     story.title = updateParams.title || story.title;
     story.summary = updateParams.summary || story.summary;
 
-    const updateStory = await story.save();
+    let updateStory: StoryDocument;
+    try {
+      updateStory = await story.save();
+    } catch (err) {
+      throw createHttpError(
+        httpStatusCodes.BAD_REQUEST,
+        'Story could not be created',
+        {
+          errors: [
+            {
+              property: 'title',
+              constraints: ['has already been taken']
+            }
+          ]
+        }
+      );
+    }
 
     return {
-      data: this.mapper.toDto(updateStory)
+      data: await this.mapper.toDto(updateStory)
     };
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
+    const errorMsg = `Could not find nor delete story with id = '${id}'`;
+
+    if (!isValidObjectId(id)) {
+      throw new createHttpError.NotFound(errorMsg);
+    }
+
     const story = await this.model.findByIdAndDelete(id).exec();
 
     if (!story) {
-      throw new createHttpError.NotFound(
-        `Could not find nor delete story with id = '${id}'`
-      );
+      throw new createHttpError.NotFound(errorMsg);
     }
   }
 }

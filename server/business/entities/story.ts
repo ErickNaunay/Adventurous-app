@@ -1,6 +1,8 @@
+import Chapter from './chapter';
 export default interface Story {
-  id: number;
+  id: string;
   title: string;
   summary: string;
+  chapters?: Chapter[];
   createdAt: Date;
 }

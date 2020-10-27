@@ -4,6 +4,8 @@ import { StatusCodes } from 'http-status-codes';
 import cors, { CorsOptions } from 'cors';
 import bodyParser from 'body-parser';
 import { HttpError } from 'http-errors';
+import swaggerUI from 'swagger-ui-express';
+import swaggerDocument from './application/swagger';
 import logger from './utils/logger';
 import expressLogger from './application/logger';
 import routes from './application/routes';
@@ -58,6 +60,7 @@ app.get('/v1/status', (req: Request, res: Response) => {
 });
 
 app.use('/', routes(app));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(errorHandler);
 

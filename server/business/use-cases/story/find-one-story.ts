@@ -4,7 +4,7 @@ import IStoryRepository, {
 } from '../../contracts/repositories/story-repository';
 
 export interface IFindOneStory {
-  execute(id: number): Promise<Response<StoryDto>>;
+  execute(id: string): Promise<Response<StoryDto>>;
 }
 
 export class FindOneStory implements IFindOneStory {
@@ -14,7 +14,7 @@ export class FindOneStory implements IFindOneStory {
     this.repository = repository;
   }
 
-  execute(id: number): Promise<Response<StoryDto>> {
+  execute(id: string): Promise<Response<StoryDto>> {
     return this.repository.findOne(id);
   }
 }

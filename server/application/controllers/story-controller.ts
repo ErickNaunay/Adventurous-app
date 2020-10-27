@@ -24,7 +24,7 @@ export async function find(req: Request, res: Response): Promise<void> {
 export async function findOne(req: Request, res: Response): Promise<void> {
   const useCase = container.resolve<IFindOneStory>(TYPES.FIND_ONE_STORY);
 
-  const result = await useCase.execute(+req.params.id);
+  const result = await useCase.execute(req.params.id);
 
   res.status(StatusCodes.OK).json(result);
 }
@@ -48,7 +48,7 @@ export async function update(req: Request, res: Response): Promise<void> {
 
   const useCase = container.resolve<IUpdateStory>(TYPES.UPDATE_STORY);
 
-  const result = await useCase.execute(+req.params.id, dto);
+  const result = await useCase.execute(req.params.id, dto);
 
   res.status(StatusCodes.OK).json(result);
 }
@@ -56,7 +56,7 @@ export async function update(req: Request, res: Response): Promise<void> {
 export async function remove(req: Request, res: Response): Promise<void> {
   const useCase = container.resolve<IDeleteStory>(TYPES.DELETE_STORY);
 
-  await useCase.execute(+req.params.id);
+  await useCase.execute(req.params.id);
 
   res.status(StatusCodes.NO_CONTENT).json();
 }
