@@ -27,7 +27,7 @@ export default class ChapterRepository implements IChapterRepository {
   }
 
   async find(): Promise<Response<ChapterDto[]>> {
-    const chapters = await this.model.find().exec();
+    const chapters = await this.model.find().select('-story').exec();
 
     const result = chapters?.length
       ? chapters.map((chapter) => this.mapper.toDto(chapter))
@@ -45,7 +45,7 @@ export default class ChapterRepository implements IChapterRepository {
       throw new createHttpError.NotFound(errorMsg);
     }
 
-    const chapter = await this.model.findById(id).exec();
+    const chapter = await this.model.findById(id).populate('story').exec();
 
     if (!chapter) {
       throw new createHttpError.NotFound(errorMsg);
@@ -102,7 +102,7 @@ export default class ChapterRepository implements IChapterRepository {
       throw new createHttpError.NotFound(errorMsg);
     }
 
-    const chapter = await this.model.findById(id).exec();
+    const chapter = await this.model.findById(id).populate('story').exec();
 
     if (!chapter) {
       throw new createHttpError.NotFound(errorMsg);
@@ -139,5 +139,9 @@ export default class ChapterRepository implements IChapterRepository {
     if (!chapter) {
       throw new createHttpError.NotFound(errorMsg);
     }
+
+    const story = await this.storyModel.findById(id);
+    const chapterIndex = story?.chapters.indexOf(chapter);
+    chapterIndex && story?.chapters.splice(chapterIndex, 1);
   }
 }

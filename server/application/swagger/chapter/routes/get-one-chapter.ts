@@ -1,21 +1,27 @@
 export default {
-  tags: ['Stories'],
-  description: 'Return all stories',
-  operationId: 'getStories',
+  tags: ['Chapters'],
+  description: 'Return a chapter',
+  operationId: 'getOneChapter',
+  parameters: [
+    {
+      in: 'path',
+      name: 'id',
+      required: true,
+      schema: {
+        type: 'string'
+      }
+    }
+  ],
   responses: {
     '200': {
-      description: 'A list of stories and its details',
+      description: 'Chapter detail.',
       content: {
         'application/json': {
           schema: {
             type: 'object',
             properties: {
               data: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  $ref: '#/components/schemas/Story'
-                }
+                $ref: '#/components/schemas/Chapter'
               }
             }
           }

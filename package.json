@@ -7,9 +7,10 @@
   },
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "format": "prettier --config .prettierrc 'server/**/*.ts' --write && echo 'Prettier format complete'",
+    "format": "prettier --config .prettierrc '*/**/*.ts' --write && echo 'Prettier format complete'",
     "watch": "onchange 'server/**/*.ts' --prettier --write {{changed}}",
-    "start:dev": "nodemon",
+    "start:api": "nodemon --exec ts-node ./server/app.ts",
+    "start:app": "nodemon --exec ts-node ./app/app.ts",
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/app.js"
   },
@@ -48,6 +49,7 @@
     "lodash": "^4.17.20",
     "mongoose": "^5.10.9",
     "morgan": "^1.10.0",
+    "pug": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.1.4",
     "tsyringe": "^4.3.0",

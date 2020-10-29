@@ -116,7 +116,7 @@ export default function initContainer(): void {
   });
 
   // USE CASES - CHAPTERS
-  container.register<ICreateChapter>(TYPES.CREATE_STORY, {
+  container.register<ICreateChapter>(TYPES.CREATE_CHAPTER, {
     useFactory: (d) =>
       new CreateChapter(d.resolve<IChapterRepository>(TYPES.CHAPTER_REPOSITORY))
   });

@@ -21,7 +21,7 @@ export default class StoryRepository implements IStoryRepository {
   }
 
   async find(): Promise<Response<StoryDto[]>> {
-    const stories = await this.model.find().exec();
+    const stories = await this.model.find().select('-chapters').exec();
 
     const result = stories?.length
       ? await Promise.all(
@@ -41,7 +41,10 @@ export default class StoryRepository implements IStoryRepository {
       throw new createHttpError.NotFound(errorMsg);
     }
 
-    const story = await this.model.findById(id).exec();
+    const story = await this.model
+      .findById(id)
+      .populate('chapters', '-story')
+      .exec();
 
     if (!story) {
       throw new createHttpError.NotFound(errorMsg);
@@ -89,7 +92,7 @@ export default class StoryRepository implements IStoryRepository {
       throw new createHttpError.NotFound(errorMsg);
     }
 
-    const story = await this.model.findById(id).exec();
+    const story = await this.model.findById(id).select('-chapters').exec();
 
     if (!story) {
       throw new createHttpError.NotFound(errorMsg);

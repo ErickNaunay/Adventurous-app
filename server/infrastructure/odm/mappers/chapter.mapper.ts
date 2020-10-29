@@ -29,7 +29,7 @@ export class ChapterMapper implements IChapterMapper {
         id: entity.story.id,
         title: entity.story.title,
         summary: entity.story.summary,
-        createdAt: entity.createdAt.toISOString()
+        createdAt: entity.story.createdAt.toISOString()
       },
       sequence: entity.sequence,
       content: entity.content,

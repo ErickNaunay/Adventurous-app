@@ -1,21 +1,25 @@
 import omit from 'lodash/omit';
+
 export const schema = {
   type: 'object',
   properties: {
     id: {
       type: 'string'
     },
-    title: {
+    story: {
+      type: 'object',
+      $ref: '#/components/schemas/Story'
+    },
+    sequence: {
+      type: 'integer'
+    },
+    content: {
       type: 'string'
     },
-    summary: {
-      type: 'string'
-    },
-    chapters: {
+    connections: {
       type: 'array',
       items: {
-        type: 'object',
-        $ref: '#/components/schemas/Chapter'
+        type: 'integer'
       }
     },
     createdAt: {
@@ -23,13 +27,13 @@ export const schema = {
     }
   },
 
-  required: ['id', 'title', 'summary']
+  required: ['id', 'sequence', 'content', 'connections']
 };
 
 export const createSchema = {
   type: 'object',
-  properties: omit(schema.properties, ['id', 'createdAt', 'chapters']),
-  required: omit(schema.properties, 'id')
+  properties: omit(schema.properties, ['id', 'story', 'createdAt']),
+  required: omit(schema.required, 'id')
 };
 
 export const updateSchema = omit(createSchema, 'required');

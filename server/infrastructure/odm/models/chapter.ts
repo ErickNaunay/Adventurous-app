@@ -12,7 +12,7 @@ export const ChapterSchema: Schema = new Schema({
   story: { type: Schema.Types.ObjectId, ref: 'Story' },
   sequence: { type: Number, default: 0, required: true },
   content: { type: String, required: true },
-  connections: [Number],
+  connections: { type: [Number], required: true },
   createdAt: { type: Date, default: Date.now }
 });
 

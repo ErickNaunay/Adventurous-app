@@ -9,6 +9,15 @@ import {
   schema as Story
 } from './story';
 
+import {
+  getOneChapter,
+  getChapters,
+  postChapter,
+  putChapter,
+  deleteChapter,
+  schema as Chapter
+} from './chapter';
+
 export default {
   openapi: '3.0.1',
   info: {
@@ -34,6 +43,7 @@ export default {
   components: {
     schemas: {
       Story,
+      Chapter,
       ErrorModel: ErrorSchema
     },
     responses: {
@@ -52,6 +62,9 @@ export default {
   tags: [
     {
       name: 'Stories'
+    },
+    {
+      name: 'Chapters'
     }
   ],
   paths: {
@@ -63,6 +76,17 @@ export default {
       get: getOneStory,
       put: putStory,
       delete: deleteStory
+    },
+    '/chapters': {
+      get: getChapters
+    },
+    '/chapters/{id}': {
+      get: getOneChapter,
+      put: putChapter,
+      delete: deleteChapter
+    },
+    '/chapters/stories/{id}': {
+      post: postChapter
     }
   }
 };

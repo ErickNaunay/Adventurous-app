@@ -1,10 +1,10 @@
 export default {
-  tags: ['Stories'],
-  description: 'Return all stories',
-  operationId: 'getStories',
+  tags: ['Chapters'],
+  description: 'Return all chapters',
+  operationId: 'getChapters',
   responses: {
     '200': {
-      description: 'A list of stories and its details',
+      description: 'A list of chapters and its details',
       content: {
         'application/json': {
           schema: {
@@ -14,7 +14,7 @@ export default {
                 type: 'array',
                 items: {
                   type: 'object',
-                  $ref: '#/components/schemas/Story'
+                  $ref: '#/components/schemas/Chapter'
                 }
               }
             }
